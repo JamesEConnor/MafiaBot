@@ -1,0 +1,6 @@
+﻿namespace MafiaBot
+{
+	class s
+	{
+	}
+}
