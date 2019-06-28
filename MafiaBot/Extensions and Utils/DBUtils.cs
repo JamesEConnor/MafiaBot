@@ -28,7 +28,15 @@ namespace MafiaBot.Utils
 			{
 				string[] split = line.Split(':');
 				if (split[0] == serverGUID)
+				{
+					reader.Close();
+					reader.Dispose();
+
+					fs.Close();
+					fs.Dispose();
+
 					return split[1];
+				}
 			}
 
 			reader.Close();
@@ -177,7 +185,14 @@ namespace MafiaBot.Utils
 		public static async Task SendEmbed(ITextChannel channel, SocketCommandContext context, string message)
 		{
 			EmbedBuilder builder = new EmbedBuilder();
-			Embed embed = builder.AddField("Message", message).WithAuthor(context.Client.CurrentUser).WithColor(Color.DarkRed).Build();
+			Embed embed = builder.WithDescription(message).WithColor(Color.DarkRed).Build();
+			await channel.SendMessageAsync(embed: embed);
+		}
+
+		public static async Task SendEmbed(ITextChannel channel, SocketCommandContext context, string message, Color c)
+		{
+			EmbedBuilder builder = new EmbedBuilder();
+			Embed embed = builder.WithDescription(message).WithColor(c).Build();
 			await channel.SendMessageAsync(embed: embed);
 		}
 	}
@@ -227,9 +242,9 @@ namespace MafiaBot.Utils
 		public const string TOWNSPEOPLE_STARTING_MESSAGE =
 			"Hello townspeople! Welcome to a game of Mafia. I'm your host MafiaBot! Hope you're all ready for some fun! Here are the rules: \n\n" +
 			"\t\uD83D\uDD2B If you can see the ${mafia} channel, you're a ${mafia}. Your goal is to kill all of the townspeople.\n\n" +
-			"\t\u2302 If you can't see the ${mafia} channel, you're a ${townsperson}. Your goal is to figure out who the mafia are and hang them. More on that in a second.\n\n" +
-			"\t\uD83D\uDE91 If you're the ${doctor}, you'll get a DM from me. You can save one person from death each night. Make it count!\n\n" +
-			"\t\uD83D\uDE94 If you're the ${cop}, you'll also get a DM. You can learn one person's role each night.\n\n" +
+			"\t\uD83C\uDFE0 If you can't see the ${mafia} channel, you're a ${townsperson}. Your goal is to figure out who the mafia are and hang them. More on that in a second.\n\n" +
+			"\t\uD83D\uDE91 If you can see the ${doctor} channel, you're the ${doctor}. You can save one person from death each night. Make it count!\n\n" +
+			"\t\uD83D\uDE94 If you can see the ${cop} channel, you're the ${cop}. You can learn one person's role each night.\n\n" +
 			"So what do I mean by night? Well, the game cycles between two periods. Day, when townspeople can elect a mayor or choose to hang someone, and night, when all of the stuff mentioned above happens. Night lasts for two minutes, or until everyone with a special role has chosen a person, whichever comes first. If you don't have a special role, that's pretty much it. If you do, check out your respective channel or DM for more info. Let's get started!\n\n" +
 			"P.S. Any votes that result in a tie will be determined randomly by me. Sorry, I don't make the rules.";
 
@@ -263,26 +278,27 @@ namespace MafiaBot.Utils
 		//Sent in town channel when mayoral election required.
 		public const string MAYORAL_ELECTION_MESSAGE =
 			"@here Alrighty everyone, gather up your megaphones and lawn signs, it's election time! Whoever holds this position gets a lot of power:\n\n" +
-			"\t\u2694 After each night, the ${mayor} can decide if there will be a hanging. If so, there will be a vote to see who will be hanged.\n\n" +
+			"\t\u2694 After each night, the ${mayor} can decide if there will be a trial. If so, there will be a vote to see who will be hanged.\n\n" +
 			"\t\u2611 So let's vote! Mention whoever you'd like to elect in the next 15 seconds!";
 
 		public const string HANGING_VOTE =
-			"Alrighty, you all decided that the best way to fight murder is murder. Well let's get this over with. Type '?vote @username' to vote for who you would like have hanged, eliminated, murdered, etc. Vote for yourself, and it won't work. If no one votes, I get to decide... and no one wants that ;)";
+			"Alrighty, you all decided that the best way to fight murder is murder. Well let's get this over with. Type '?vote @username' to vote for who you would like hanged, eliminated, murdered, etc. Vote for yourself, and it won't work. If no one votes, I get to decide... and no one wants that ;)";
 
 		//Sent in town channel when the mafia win.
 		public const string MAFIA_WIN_MESSAGE =
-			"\uD83D\uDD75 @here Congratulations to the ${mafia}! You've won!!!";
+			"\uD83D\uDD75 @here Congratulations to the ${mafia}s! You've won!!!";
 
 		//Sent in town channel when the townspeople win.
 		public const string TOWNSPEOPLE_WIN_MESSAGE =
-			"\u2302 @here Congratulations to the ${townsperson}! You've won!!!";
+			"\uD83C\uDFE0 @here Congratulations to the ${townsperson}s! You've won!!!";
 
-		public static string GenerateDeathMessage(IUser user)
+		public static string GenerateDeathMessage(IUser user, string roleReveal)
 		{
 			string[] messages = File.ReadAllLines(AppContext.BaseDirectory + "/messages/death-messages.txt");
 			Random r = new Random();
 			return messages[r.Next(0, messages.Length)].Replace("${username}", user.Mention) + "\n" +
-				                                       user.Username + " was eliminated.";
+				                                       user.Username + " was eliminated.\n" +
+				                                       roleReveal;
 		}
 
 		public static string GenerateSaveMessage(IUser user)
@@ -300,6 +316,16 @@ namespace MafiaBot.Utils
 					  .Replace("${cop}", ns.cop)
 					  .Replace("${doctor}", ns.doctor)
 					  .Replace("${mayor}", ns.mayor);
+		}
+
+		public static bool SaveNameset(this Nameset names)
+		{
+			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/name-sets/" + names.mafia + ".json"))
+				return false;
+
+			FileStream fs = File.Create(AppDomain.CurrentDomain.BaseDirectory + "/name-sets/" + names.mafia + ".json");
+			StreamWriter writer = new StreamWriter(fs);
+			writer
 		}
 	}
 

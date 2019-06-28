@@ -153,8 +153,8 @@
     <Compile Include="Services\GameService.cs" />
     <Compile Include="Modules\GameModule.cs" />
     <Compile Include="Extensions and Utils\DBUtils.cs" />
-    <Compile Include="s.cs" />
     <Compile Include="Modules\SettingsModule.cs" />
+    <Compile Include="Modules\HelpModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

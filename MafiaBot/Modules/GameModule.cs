@@ -18,20 +18,18 @@ namespace MafiaBot.Modules
 		}
 
 		[Command("startgame")]
+		[Summary("Begins a game of Mafia")]
 		public async Task StartGameAsync(string nameset = "default")
 		{
-			try
+			if (!GameService.gamesInProgress.ContainsKey(Context.Guild.Id) || !GameService.gamesInProgress[Context.Guild.Id])
 			{
-				if (!GameService.gamesInProgress.ContainsKey(Context.Guild.Id) || !GameService.gamesInProgress[Context.Guild.Id])
-				{
-					await Context.Channel.SendMessageAsync("There's a game of Mafia that will be starting in #mafia soon. You must be in that channel to play!");
-					await service.StartGame(this.Context, nameset);
-				}
+				await Context.Channel.SendMessageAsync("There's a game of Mafia that will be starting in #mafia soon. You must be in that channel to play!");
+				await service.StartGame(this.Context, nameset);
 			}
-			catch (Exception e) { Console.WriteLine(e); }
 		}
 
 		[Command("vote")]
+		[Summary("A command for use in game, which allows players to vote for things.")]
 		public async Task Vote(IUser user)
 		{
 			if (user.Id != Context.User.Id)
@@ -46,7 +44,8 @@ namespace MafiaBot.Modules
 		}
 
 		[Command("hanging")]
-		public void Hanging()
+		[Summary("A command for use in game by the mayor, which causes a hanging.")]
+		public async Task Hanging()
 		{
 			if (Context.User.Id == GameService.mayors[Context.Guild.Id].Id)
 				GameService.cancelTokens[Context.Guild.Id].Cancel();
