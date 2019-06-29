@@ -108,6 +108,12 @@ namespace MafiaBot.Services
 			await channels[0].SendMessageAsync((milliseconds / 2000) + " seconds until the game starts!");
 			await Task.Delay(milliseconds / 2);
 
+			if (int.Parse(Settings.ReadSetting(settings, "maxplayers")) > await GuildUtils.NumberOfOnlineUsers(channels[0]))
+			{
+				await channels[0].SendMessageAsync("According to server settings, there can only be " + Settings.ReadSetting(settings, "maxplayers") + " players in the game. Anyone in this channel is considered a player, so some will have to go. Think something's wrong? Talk to the server owner...");
+				return;
+			}
+
 			//0 = Townspeople, 1 = Mafia, 2 = Detective, 3 = Doctor
 			IUser[][] lists = GenerateUserLists(context.Guild.GetChannel(channels[0].Id));
 
@@ -229,14 +235,14 @@ namespace MafiaBot.Services
 
 			try
 			{
-				IUser killed = await RunVote(context.Guild, mafiaChannel, 20, Messages.MAFIA_VOTE_MESSAGE.UseNameset(names), users[1], allUsers);
+				IUser killed = await RunVote(context.Guild, mafiaChannel, 20, Messages.MAFIA_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), users[1], allUsers);
 				Console.WriteLine(killed);
 
 				await GuildUtils.SendEmbed(townChannel, context, "Hang tight! The " + names.doctor + " is choosing who to save!", Color.Blue);
-				IUser saved = await RunVote(context.Guild, doctorChannel, 10, Messages.DOCTOR_VOTE_MESSAGE.UseNameset(names), doctorUser, allUsers);
+				IUser saved = await RunVote(context.Guild, doctorChannel, 10, Messages.DOCTOR_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), doctorUser, allUsers);
 
 				await GuildUtils.SendEmbed(townChannel, context, "Hang tight! The " + names.cop + " is learning someone's role!", Color.Blue);
-				IUser learned = await RunVote(context.Guild, detectiveChannel, 10, Messages.DETECTIVE_VOTE_MESSAGE.UseNameset(names), detectiveUser);
+				IUser learned = await RunVote(context.Guild, detectiveChannel, 10, Messages.DETECTIVE_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), detectiveUser);
 				Console.WriteLine(learned);
 				if (learned != null)
 				{

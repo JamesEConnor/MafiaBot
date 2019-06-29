@@ -13,6 +13,8 @@ namespace MafiaBot.Utils
 	public class DBUtils
 	{
 		public const string DEFAULT_SETTINGS = "{maxplayers,-1},{minplayers,5},{namesets,true},{timetostart,60}";
+		public const string SETTING_DESCRIPTIONS = "{maxplayers,The maximum number of people who can join a game. -1 (the default) means no maximum.},{minplayers,The minimum number of players required to start a game. This defaults to and is required to be at least 5.},{namesets,Whether or not custom namesets are allowed to be used.},{timetostart,The number of seconds between when a game is created and when it starts. Defaults at 60, must be greater than or equal to 10.}";
+		public const string SETTING_TYPE_REQUIREMENTS = "{maxplayers,INT},{minplayers,INTG5},{namesets,BOOL},{timetostart,INTG10}";
 
 		public static string CheckDBsForServer(string serverGUID)
 		{
@@ -267,13 +269,13 @@ namespace MafiaBot.Utils
 			"\t\uD83C\uDFD9 You can then go back to the town channel and see what happens!";
 
 		public const string MAFIA_VOTE_MESSAGE =
-			"Time to choose someone to kill. Cast your (1) vote for someone not in the Mafia by typing '?vote @username' If this person is in the Mafia, it won't work!";
+			"Time to choose someone to kill. Cast your (1) vote for someone not in the Mafia by typing '${delimeter}vote @username' If this person is in the Mafia, it won't work!";
 
 		public const string DOCTOR_VOTE_MESSAGE =
-			"Time to choose someone to save. Cast your (1) vote for someone other than you by typing '?vote @username' If you vote for yourself, it won't work!";
+			"Time to choose someone to save. Cast your (1) vote for someone other than you by typing '${delimeter}vote @username' If you vote for yourself, it won't work!";
 
 		public const string DETECTIVE_VOTE_MESSAGE =
-			"Time to learn someone's role. Cast your (1) vote for someone other than you by typing '?vote @username' If you vote for yourself, it won't work!";
+			"Time to learn someone's role. Cast your (1) vote for someone other than you by typing '${delimeter}vote @username' If you vote for yourself, it won't work!";
 
 		//Sent in town channel when mayoral election required.
 		public const string MAYORAL_ELECTION_MESSAGE =
@@ -318,14 +320,25 @@ namespace MafiaBot.Utils
 					  .Replace("${mayor}", ns.mayor);
 		}
 
-		public static bool SaveNameset(this Nameset names)
+		public static bool SaveNameset(this Nameset names, string name)
 		{
-			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/name-sets/" + names.mafia + ".json"))
+			if (File.Exists(AppDomain.CurrentDomain.BaseDirectory + "/name-sets/" + name + ".json"))
 				return false;
 
-			FileStream fs = File.Create(AppDomain.CurrentDomain.BaseDirectory + "/name-sets/" + names.mafia + ".json");
+			string lines = File.ReadAllText(AppDomain.CurrentDomain.BaseDirectory + "/nameset-template.json");
+			lines = lines.UseNameset(names);
+
+			FileStream fs = File.Create(AppDomain.CurrentDomain.BaseDirectory + "/name-sets/" + name + ".json");
 			StreamWriter writer = new StreamWriter(fs);
-			writer
+			writer.Write(lines);
+
+			writer.Close();
+			writer.Dispose();
+
+			fs.Close();
+			fs.Dispose();
+
+			return true;
 		}
 	}
 
