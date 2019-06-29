@@ -1,6 +1,8 @@
 # MafiaBot
 A bot submitted for Discord's Hackweek. It runs a game of Mafia and can be customized with different "name sets" that are in JSON format. It's delimeter (The string or character you put before a command) is "?" by default.
 
+To invite it to a server, **it must have full Administrator permissions.**
+
 ## Setting up Mafia Bot on your own Device
 No matter how you choose to set up MafiaBot, you must make sure to set up the configuration file correctly. A 'config.txt' file must be created within the Base Directory of the program, and must contain the following values:
 
