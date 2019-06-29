@@ -1,7 +1,7 @@
 # MafiaBot
 A bot submitted for Discord's Hackweek. It runs a game of Mafia and can be customized with different "name sets" that are in JSON format. It's delimeter is "?" by default.
 
-### Setting up Mafia Bot on your own Device
+## Setting up Mafia Bot on your own Device
 No matter how you choose to set up MafiaBot, you must make sure to set up the configuration file correctly. A 'config.txt' file must be created within the Base Directory of the program, and must contain the following values:
 
 ```
@@ -17,7 +17,7 @@ This code was written and built using Xamarin Studio, a release of Monodevelop. 
 #### Using the Pre-Built Version
 To use the pre-built version (our most(ly) stable release), simply download the "Example Build" zip file. Unzip it, setup the configuration file as described above, and run MafiaBot.exe. We currently do not have an OSX build and, due to hardware limitations, unfortunately do not have one in the foreseeable future.
 
-### Commands
+## Commands
 (Parentheses) signify optional parameters while [brackets] signify required parameters.
 
 * help          (command)  - Displays a description of all command functions or a specific one, if provided.
@@ -28,13 +28,13 @@ To use the pre-built version (our most(ly) stable release), simply download the 
 * vote          [user]     - Registers your vote for a specific user during a game. You will be prompted to use this command during a game.
 * hanging                  - This command can only be used by the mayor during a game, and only at certain times. When used, it causes a vote to take place on who to hang.
 
-### Settings
+## Settings
 * Max Players [maxplayers] - The maximum number of players allowed in a game of Mafia. Any value less than or equal to 0 is the same as none. The default is -1.
 * Minimum Players [minplayers] - The minimum number of players required to start a game. This must be at least 5, and defaults to that value.
 * Custom name sets allowed. [namesets] - Determines whether or not custom name sets are allowed to be used.
 * Time to Start [timetostart] - How much time (in seconds) between when a user calls that "startgame" command and when the game actually starts. This defaults at 60 to ensure that players have enough time to get into the channel before the game begins.
 
-### Creating Name Sets
+## Creating Name Sets
 > This section has been deprecated since the implementation of the 'createnameset' command. However, it remains for posterity.
 
 To create a nameset, navigate to the 'name-sets' folder in the program's Base Directory. Then, create a JSON file with the name of the new nameset. Simply copy the template below into this file, replacing each of the '${}'s with their proper values.
@@ -49,7 +49,7 @@ To create a nameset, navigate to the 'name-sets' folder in the program's Base Di
 }
 ```
 
-### Future Development
+# Future Development
 On the roadmap ahead, there are of course some ideas available. If you would like to contribute to MafiaBot, here are some things that you could try at:
 
 - [ ] Creating different variants of the game (i.e. One Night: Ultimate Werewolf, Epicmafia). This would require a large amount of re-programming, and might even have to become a different repository. But, imagine if it could all be kept in one bot?
