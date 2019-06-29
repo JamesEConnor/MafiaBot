@@ -59,3 +59,7 @@ On the roadmap ahead, there are of course some ideas available. If you would lik
 - [ ] OSX Build. Due to hardware constraints, I am currently unable to create an OSX build in the foreseeable future, but it remains as a goal for MafiaBot.
 
 If you're interested in contributing to MafiaBot, and need clarification of code, open up an issue. I'd be more than happy to help! As this is part of Discord Hackweek, I'll try to start commenting it and making it clearer after the end of the competition.
+
+# Credits
+Made by [@JamesEConnor](https://github.com/JamesEConnor/)
+Icon made by [Freepik](https://www.freepik.com/)
