@@ -48,10 +48,13 @@ To create a nameset, navigate to the 'name-sets' folder in the program's Base Di
 	'mayor': '${mayor}'
 }
 ```
+## Known Issues
+Right now, due to how Discord's permissions work, the Server Owner is unable to play as they can view every single channel. Because of time constraints, I was unable to come up with a way around this. See *Future Development*.
 
 # Future Development
 On the roadmap ahead, there are of course some ideas available. If you would like to contribute to MafiaBot, here are some things that you could try at:
 
+- [ ] Create a system that allows the Server Owner to also play while not being able to view channels.
 - [ ] Creating different variants of the game (i.e. One Night: Ultimate Werewolf, Epicmafia). This would require a large amount of re-programming, and might even have to become a different repository. But, imagine if it could all be kept in one bot?
 - [ ] OSX Build. Due to hardware constraints, I am currently unable to create an OSX build in the foreseeable future, but it remains as a goal for MafiaBot.
 
