@@ -21,7 +21,7 @@ A bot submitted for Discord's Hackweek. It runs a game of Mafia and can be custo
 * Time to Start [timetostart] - How much time (in seconds) between when a user calls that "startgame" command and when the game actually starts. This defaults at 60 to ensure that players have enough time to get into the channel before the game begins.
 
 ### Creating Name Sets
-*This section has been deprecated since the implementation of the 'createnameset' command. However, it remains for posterity.*
+> This section has been deprecated since the implementation of the 'createnameset' command. However, it remains for posterity.
 
 To create a nameset, navigate to the 'name-sets' folder in the program's Base Directory. Then, create a JSON file with the name of the new nameset. Simply copy the template below into this file, replacing each of the '${}'s with their proper values.
 
