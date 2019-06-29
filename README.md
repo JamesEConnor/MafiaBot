@@ -62,4 +62,5 @@ If you're interested in contributing to MafiaBot, and need clarification of code
 
 # Credits
 Made by [@JamesEConnor](https://github.com/JamesEConnor/)
+
 Icon made by [Freepik](https://www.freepik.com/)
