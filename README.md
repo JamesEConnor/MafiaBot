@@ -52,7 +52,7 @@ To create a nameset, navigate to the 'name-sets' folder in the program's Base Di
 ### Future Development
 On the roadmap ahead, there are of course some ideas available. If you would like to contribute to MafiaBot, here are some things that you could try at:
 
-* Creating different variants of the game (i.e. One Night: Ultimate Werewolf, Epicmafia). This would require a large amount of re-programming, and might even have to become a different repository. But, imagine if it could all be kept in one bot?
-* OSX Build. Due to hardware constraints, I am currently unable to create an OSX build in the foreseeable future, but it remains as a goal for MafiaBot.
+[ ] Creating different variants of the game (i.e. One Night: Ultimate Werewolf, Epicmafia). This would require a large amount of re-programming, and might even have to become a different repository. But, imagine if it could all be kept in one bot?
+[ ] OSX Build. Due to hardware constraints, I am currently unable to create an OSX build in the foreseeable future, but it remains as a goal for MafiaBot.
 
 If you're interested in contributing to MafiaBot, and need clarification of code, open up an issue. I'd be more than happy to help! As this is part of Discord Hackweek, I'll try to start commenting it and making it clearer after the end of the competition.
