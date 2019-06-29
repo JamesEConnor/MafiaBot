@@ -11,8 +11,10 @@ startgame     [name set] - Creates a game of Mafia, as well as any necessary cha
 set           [setting]  - Modifies a setting for the server. **This command can only be run by the server owner.**
 listsettings             - Lists all possible settings.
 createnameset [name][mafia][townsperson][doctor][detective][mayor] - Creates a name set called 'name' with the provided descriptions.
-vote          [user]     - Registers your vote for a specific user during a game. You will be prompted to use this command during a game.
-hanging                  - This command can only be used by the mayor during a game, and only at certain times. When used, it causes a vote to take place on who to hang.
+vote          [user]     - Registers your vote for a specific user during a game. You will be prompted to use this command during a
+			   game.
+hanging                  - This command can only be used by the mayor during a game, and only at certain times. When used, it causes a
+			   vote to take place on who to hang.
 ```
 
 ### Settings
