@@ -1,7 +1,21 @@
 # MafiaBot
 A bot submitted for Discord's Hackweek. It runs a game of Mafia and can be customized with different "name sets" that are in JSON format. It's delimeter is "?" by default.
 
-### Setting Up Mafia Bot on your own Device
+### Setting up Mafia Bot on your own Device
+No matter how you choose to set up MafiaBot, you must make sure to set up the configuration file correctly. A 'config.txt' file must be created within the Base Directory of the program, and must contain the following values:
+
+```
+token:[INSERT DISCORD-PROVIDED DEVELOPER TOKEN]
+delimeter:?
+debug:false
+```
+The token is obtainable from the Discord Developer Portal. The delimeter can be set to whatever you like, and debug should be kept to false.
+
+##### Building From Source
+This code was written and built using Xamarin Studio, a release of Monodevelop. While understanding that Monodevelop is outdated and a little obsolete, I prefer it's workflow over Visual Studio. As a result, I can only vouch for it's being built from Monodevelop, though I'm sure it works in Visual Studio perfectly fine. Simply download the files, open them up, and build. If you run into issues with packages, it currently uses Discord.NET and all of it's dependencies.
+
+##### Using the Pre-Built Version
+To use the pre-built version (our most(ly) stable release), simply download the "Example Build" zip file. Unzip it, setup the configuration file as described above, and run MafiaBot.exe. We currently do not have an OSX build and, due to hardware limitations, unfortunately do not have one in the foreseeable future.
 
 ### Commands
 (Parentheses) signify optional parameters while [brackets] signify required parameters.
@@ -34,3 +48,11 @@ To create a nameset, navigate to the 'name-sets' folder in the program's Base Di
 	'mayor': '${mayor}'
 }
 ```
+
+### Future Development
+On the roadmap ahead, there are of course some ideas available. If you would like to contribute to MafiaBot, here are some things that you could try at:
+
+* Creating different variants of the game (i.e. One Night: Ultimate Werewolf, Epicmafia). This would require a large amount of re-programming, and might even have to become a different repository. But, imagine if it could all be kept in one bot?
+* OSX Build. Due to hardware constraints, I am currently unable to create an OSX build in the foreseeable future, but it remains as a goal for MafiaBot.
+
+If you're interested in contributing to MafiaBot, and need clarification of code, open up an issue. I'd be more than happy to help! As this is part of Discord Hackweek, I'll try to start commenting it and making it clearer after the end of the competition.
