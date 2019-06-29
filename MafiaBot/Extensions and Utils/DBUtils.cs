@@ -308,7 +308,7 @@ namespace MafiaBot.Utils
 			string[] messages = File.ReadAllLines(AppContext.BaseDirectory + "/messages/save-messages.txt");
 			Random r = new Random();
 			return messages[r.Next(0, messages.Length)].Replace("${username}", user.Mention) + "\n" +
-				                                       user.Username + " survived being a murder attempt.";
+				                                       user.Username + " survived a murder attempt.";
 		}
 
 		public static string UseNameset(this string str, Nameset ns)
@@ -352,7 +352,7 @@ namespace MafiaBot.Utils
 
 		public static T[] Remove<T>(this T[] array, T item)
 		{
-			List<T> result = new List<T>();
+			List<T> result = new List<T>(array);
 			result.Remove(item);
 			return result.ToArray();
 		}

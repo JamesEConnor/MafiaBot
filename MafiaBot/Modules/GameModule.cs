@@ -23,7 +23,7 @@ namespace MafiaBot.Modules
 		{
 			if (!GameService.gamesInProgress.ContainsKey(Context.Guild.Id) || !GameService.gamesInProgress[Context.Guild.Id])
 			{
-				await Context.Channel.SendMessageAsync("There's a game of Mafia that will be starting in #mafia soon. You must be in that channel to play!");
+				await Context.Channel.SendMessageAsync("There's a game of Mafia that will be starting soon. You must be in that channel to play!");
 
 				if ((nameset == "default" || nameset == "mafia")
 				   || Settings.ReadSetting(DBUtils.CheckDBsForServer(Context.Guild.Id.ToString()), "namesets") == "true")

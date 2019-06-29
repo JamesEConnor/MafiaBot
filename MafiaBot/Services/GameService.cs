@@ -155,6 +155,9 @@ namespace MafiaBot.Services
 					IUser[] results = await Night(context, settings, channels, names, users, allUsers);
 					if (results[0].Id != results[1].Id)
 					{
+						if (MafiaBot.DEBUG_MODE)
+							Console.WriteLine(results[0] + " - " + results[1] + " - " + allUsers.Length);
+
 						allUsers = allUsers.Remove(results[0]);
 						RemoveUser(ref users, results[0], names);
 					}
@@ -202,7 +205,7 @@ namespace MafiaBot.Services
 					}
 					else
 					{
-						await GuildUtils.SendEmbed(channels[0], context, "Fine coward, I guess there's no trial... Now I'm disappointed. Whelp, time for another round of the old-fashioned killing...", Color.Blue);
+						await GuildUtils.SendEmbed(channels[0], context, "Fine coward, I guess there's no trial... Now I'm disappointed. Whelp, time for another round of the old-fashioned killing...", Color.Green);
 					}
 				}
 
@@ -235,14 +238,15 @@ namespace MafiaBot.Services
 
 			try
 			{
-				IUser killed = await RunVote(context.Guild, mafiaChannel, 20, Messages.MAFIA_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), users[1], allUsers);
-				Console.WriteLine(killed);
+				IUser killed = await RunVote(context.Guild, mafiaChannel, 60, Messages.MAFIA_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), users[1], allUsers);
+				await channels[1].SendMessageAsync(killed.Username + " will be killed...");
 
 				await GuildUtils.SendEmbed(townChannel, context, "Hang tight! The " + names.doctor + " is choosing who to save!", Color.Blue);
-				IUser saved = await RunVote(context.Guild, doctorChannel, 10, Messages.DOCTOR_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), doctorUser, allUsers);
+				IUser saved = await RunVote(context.Guild, doctorChannel, 40, Messages.DOCTOR_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), doctorUser, allUsers);
+				await channels[3].SendMessageAsync(saved.Username + " will be saved...");
 
 				await GuildUtils.SendEmbed(townChannel, context, "Hang tight! The " + names.cop + " is learning someone's role!", Color.Blue);
-				IUser learned = await RunVote(context.Guild, detectiveChannel, 10, Messages.DETECTIVE_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), detectiveUser);
+				IUser learned = await RunVote(context.Guild, detectiveChannel, 40, Messages.DETECTIVE_VOTE_MESSAGE.Replace("${delimeter}", MafiaBot.delimeter).UseNameset(names), detectiveUser);
 				Console.WriteLine(learned);
 				if (learned != null)
 				{
@@ -283,7 +287,7 @@ namespace MafiaBot.Services
 				}
 				else
 				{
-					await townChannel.SendMessageAsync(Messages.GenerateSaveMessage(killed));
+					await GuildUtils.SendEmbed(townChannel, context, Messages.GenerateSaveMessage(killed), new Color(255, 255, 255));
 				}
 
 				return new IUser[] { killed, saved };
@@ -319,7 +323,8 @@ namespace MafiaBot.Services
 			await GuildUtils.SetAccessPermissions(channel, users, GuildUtils.CANT_SEND);
 			votingChannels.Remove(channel.Id);
 
-			Console.WriteLine(votes[guild.Id].Count + ":" + (randomSelection == null));
+			if(MafiaBot.DEBUG_MODE)
+				Console.WriteLine(votes[guild.Id].Count + ":" + (randomSelection == null) + ":" + (randomSelection == null ? -1 : randomSelection.Length));
 
 			if (votes[guild.Id].Count > 0)
 				return votes[guild.Id].MostCommon();
@@ -369,46 +374,57 @@ namespace MafiaBot.Services
 
 		private IUser[][] GenerateUserLists(SocketChannel channel)
 		{
-			IUser[][] result = new IUser[4][];
-
-			int mafiaCount = channel.Users.Count / 3;
-			result[1] = new IUser[mafiaCount];
-			result[2] = new IUser[1];
-			result[3] = new IUser[1];
-
-			List<SocketUser> users = new List<SocketUser>(channel.Users);
-			Random r = new Random();
-			int i = 0;
-			for (int a = 0; a < mafiaCount; a++)
+			try
 			{
+				IUser[][] result = new IUser[4][];
+
+				List<SocketUser> users = new List<SocketUser>(channel.Users.Where((arg) => arg.Status == UserStatus.Online));
+
+				int mafiaCount = users.Count / 3;
+				result[1] = new IUser[mafiaCount];
+				result[2] = new IUser[1];
+				result[3] = new IUser[1];
+
+				if (MafiaBot.DEBUG_MODE)
+					Console.WriteLine("COUNT: " + users.Count + "---" + mafiaCount);
+
+				Random r = new Random();
+				int i = 0;
+				for (int a = 0; a < mafiaCount; a++)
+				{
+					i = r.Next(0, users.Count);
+					do
+					{
+						Console.WriteLine("1");
+						result[1][a] = users[i];
+						users.RemoveAt(i);
+						i = r.Next(0, users.Count);
+					} while (users.Count > 0 && users[i].IsBot && !MafiaBot.DEBUG_MODE);
+				}
+
 				i = r.Next(0, users.Count);
 				do
 				{
-					result[1][a] = users[i];
+					Console.WriteLine("2");
+					result[2][0] = users[i];
 					users.RemoveAt(i);
 					i = r.Next(0, users.Count);
-				} while (users[i].IsBot && !MafiaBot.DEBUG_MODE);
+				} while (users.Count > 0 && users[i].IsBot && !MafiaBot.DEBUG_MODE);
+
+				i = r.Next(0, users.Count);
+				do
+				{
+					Console.WriteLine("3");
+					result[3][0] = users[i];
+					users.RemoveAt(i);
+					i = r.Next(0, users.Count);
+				} while (users.Count > 0 && users[i].IsBot && !MafiaBot.DEBUG_MODE);
+
+				result[0] = users.Where(x => (!x.IsBot && x.Status == UserStatus.Online) || MafiaBot.DEBUG_MODE).ToArray();
+
+				return result;
 			}
-
-			i = r.Next(0, users.Count);
-			do
-			{
-				result[2][0] = users[i];
-				users.RemoveAt(i);
-				i = r.Next(0, users.Count);
-			} while (users[i].IsBot && !MafiaBot.DEBUG_MODE);
-
-			i = r.Next(0, users.Count);
-			do
-			{
-				result[3][0] = users[i];
-				users.RemoveAt(i);
-				i = r.Next(0, users.Count);
-			} while (users[i].IsBot && !MafiaBot.DEBUG_MODE);
-
-			result[0] = users.FindAll(x => !(x.IsBot || MafiaBot.DEBUG_MODE)).ToArray();
-
-			return result;
+			catch (Exception e) { Console.WriteLine(e); return null; }
 		}
 	}
 }
